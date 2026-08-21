@@ -3,32 +3,287 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="我的第一个 Codex 项目——一个简洁、现代的网页体验。">
   <title>我的第一个 Codex 项目</title>
   <style>
+    :root {
+      color-scheme: light;
+      --primary: #6d5dfc;
+      --primary-dark: #5546e8;
+      --text: #182033;
+      --muted: #68708a;
+      --card: rgba(255, 255, 255, 0.78);
+      --border: rgba(255, 255, 255, 0.72);
+      --shadow: 0 24px 60px rgba(70, 56, 150, 0.16);
+    }
+
+    * { box-sizing: border-box; }
+
     body {
-      font-family: Arial, sans-serif;
+      min-height: 100vh;
+      margin: 0;
+      overflow-x: hidden;
+      color: var(--text);
+      font-family: Inter, "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+      background:
+        radial-gradient(circle at 15% 20%, rgba(154, 134, 255, 0.5), transparent 34%),
+        radial-gradient(circle at 88% 15%, rgba(104, 211, 255, 0.48), transparent 32%),
+        linear-gradient(135deg, #f4f1ff 0%, #eef8ff 48%, #fff5fb 100%);
+    }
+
+    body::before,
+    body::after {
+      position: fixed;
+      z-index: -1;
+      width: 280px;
+      height: 280px;
+      border-radius: 50%;
+      filter: blur(12px);
+      content: "";
+      animation: float 9s ease-in-out infinite;
+    }
+
+    body::before {
+      top: -90px;
+      right: -70px;
+      background: rgba(113, 203, 255, 0.32);
+    }
+
+    body::after {
+      bottom: -120px;
+      left: -70px;
+      background: rgba(170, 123, 255, 0.25);
+      animation-delay: -4s;
+    }
+
+    .page {
+      display: grid;
+      place-items: center;
+      min-height: 100vh;
+      padding: 48px 20px;
+    }
+
+    .hero {
+      width: min(960px, 100%);
+      padding: clamp(32px, 6vw, 68px);
       text-align: center;
-      padding-top: 100px;
-      background: #f5f7fb;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 30px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
     }
 
-    button {
-      padding: 12px 24px;
-      font-size: 16px;
-      color: white;
-      background: #2563eb;
-      border: none;
-      border-radius: 8px;
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 20px;
+      padding: 8px 14px;
+      color: var(--primary-dark);
+      font-size: 14px;
+      font-weight: 700;
+      background: rgba(109, 93, 252, 0.1);
+      border: 1px solid rgba(109, 93, 252, 0.16);
+      border-radius: 999px;
+    }
+
+    .badge::before {
+      width: 8px;
+      height: 8px;
+      background: #31c48d;
+      border-radius: 50%;
+      box-shadow: 0 0 0 4px rgba(49, 196, 141, 0.14);
+      content: "";
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(36px, 7vw, 68px);
+      line-height: 1.12;
+      letter-spacing: -0.04em;
+      background: linear-gradient(110deg, #20263a 15%, #6657ee 58%, #268fbd 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .subtitle {
+      max-width: 620px;
+      margin: 22px auto 0;
+      color: var(--muted);
+      font-size: clamp(16px, 2.2vw, 19px);
+      line-height: 1.8;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 34px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      min-width: 150px;
+      padding: 13px 22px;
+      color: var(--text);
+      font: inherit;
+      font-weight: 700;
+      text-decoration: none;
+      background: rgba(255, 255, 255, 0.82);
+      border: 1px solid rgba(103, 96, 143, 0.16);
+      border-radius: 14px;
+      box-shadow: 0 8px 18px rgba(54, 45, 115, 0.08);
       cursor: pointer;
+      transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease;
     }
 
-    button:hover {
-      background: #1d4ed8;
+    .button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 24px rgba(54, 45, 115, 0.15);
+    }
+
+    .button:focus-visible {
+      outline: 3px solid rgba(109, 93, 252, 0.28);
+      outline-offset: 3px;
+    }
+
+    .button.primary {
+      color: #fff;
+      background: linear-gradient(135deg, #7667ff, #5143df);
+      border-color: transparent;
+      box-shadow: 0 12px 28px rgba(94, 77, 227, 0.3);
+    }
+
+    .button.primary:hover {
+      background: linear-gradient(135deg, #6858f5, #4638ce);
+      box-shadow: 0 16px 32px rgba(94, 77, 227, 0.36);
+    }
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-top: 48px;
+      text-align: left;
+    }
+
+    .feature {
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.58);
+      border: 1px solid rgba(255, 255, 255, 0.9);
+      border-radius: 18px;
+      transition: transform 180ms ease, background 180ms ease;
+    }
+
+    .feature:hover {
+      transform: translateY(-3px);
+      background: rgba(255, 255, 255, 0.84);
+    }
+
+    .feature-icon {
+      display: grid;
+      place-items: center;
+      width: 38px;
+      height: 38px;
+      margin-bottom: 14px;
+      font-size: 19px;
+      background: rgba(109, 93, 252, 0.1);
+      border-radius: 11px;
+    }
+
+    .feature h2 { margin: 0 0 7px; font-size: 16px; }
+
+    .feature p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.65;
+    }
+
+    #message {
+      min-height: 24px;
+      margin: 20px 0 -8px;
+      color: var(--primary-dark);
+      font-weight: 700;
+      opacity: 0;
+      transform: translateY(5px);
+      transition: opacity 180ms ease, transform 180ms ease;
+    }
+
+    #message.visible { opacity: 1; transform: translateY(0); }
+
+    @keyframes float {
+      0%, 100% { transform: translate3d(0, 0, 0); }
+      50% { transform: translate3d(0, 22px, 0); }
+    }
+
+    @media (max-width: 700px) {
+      .hero { border-radius: 24px; }
+      .features { grid-template-columns: 1fr; }
+      .feature { text-align: center; }
+      .feature-icon { margin-inline: auto; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        scroll-behavior: auto !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
     }
   </style>
 </head>
 <body>
-  <h1>我的第一个 Codex 项目</h1>
-  <button onclick="alert('你点击了按钮！')">点我一下</button>
+  <main class="page">
+    <section class="hero" aria-labelledby="page-title">
+      <span class="badge">项目已启动</span>
+      <h1 id="page-title">我的第一个 Codex 项目</h1>
+      <p class="subtitle">从一个简单页面开始，把灵感变成清晰、优雅而令人愉悦的数字体验。</p>
+
+      <div class="actions">
+        <button class="button primary" id="explore-button" type="button">
+          开始探索 <span aria-hidden="true">→</span>
+        </button>
+        <a class="button" href="#features">了解更多</a>
+      </div>
+      <p id="message" role="status" aria-live="polite">很高兴见到你，探索之旅现在开始！</p>
+
+      <div class="features" id="features">
+        <article class="feature">
+          <div class="feature-icon" aria-hidden="true">✦</div>
+          <h2>简洁设计</h2>
+          <p>减少视觉干扰，让重要内容自然成为页面焦点。</p>
+        </article>
+        <article class="feature">
+          <div class="feature-icon" aria-hidden="true">◈</div>
+          <h2>现代体验</h2>
+          <p>渐变、光影与细腻动效共同营造轻盈的层次感。</p>
+        </article>
+        <article class="feature">
+          <div class="feature-icon" aria-hidden="true">↗</div>
+          <h2>响应式布局</h2>
+          <p>无论电脑还是手机，都能保持舒适清晰的浏览体验。</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const exploreButton = document.querySelector("#explore-button");
+    const message = document.querySelector("#message");
+
+    exploreButton.addEventListener("click", () => {
+      message.classList.add("visible");
+      exploreButton.firstChild.textContent = "探索中 ";
+    });
+  </script>
 </body>
 </html>
